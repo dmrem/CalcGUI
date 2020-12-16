@@ -12,6 +12,6 @@ namespace CalcTreeConsoleTest
         /// returns that number.
         /// </summary>
         /// <returns>The result of the calculation.</returns>
-        public MathNode evaluate();
+        MathNode evaluate();
     }
 }

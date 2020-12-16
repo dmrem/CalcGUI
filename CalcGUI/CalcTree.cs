@@ -23,7 +23,7 @@ namespace CalcTreeConsoleTest
             // used tutorial of algorithm from http://www.learn4master.com/algorithms/convert-infix-notation-to-reverse-polish-notation-java
             // used pseudocode but not java example
             
-            String[] tokens = s.Split(" ");
+            String[] tokens = s.Split(' ');
 
             Queue RPNQueue = new Queue();
             Stack OperatorStack = new Stack();
@@ -91,35 +91,35 @@ namespace CalcTreeConsoleTest
             }
 
             // helper function to recursively generate a tree
-            MathNode generateTree(Queue RPNQueue)
+            MathNode generateTree(Queue RPN)
             {
-                if (RPNQueue.Peek() is double)
+                if (RPN.Peek() is double)
                 {
-                    return new NumericNode((double)RPNQueue.Dequeue());
+                    return new NumericNode((double)RPN.Dequeue());
                 }
 
                 MathNode left, right;
-                switch ((string)RPNQueue.Dequeue())
+                switch ((string)RPN.Dequeue())
                 {
                     case "+":
-                        right = generateTree(RPNQueue);
-                        left = generateTree(RPNQueue);
+                        right = generateTree(RPN);
+                        left = generateTree(RPN);
                         return new OperatorNode(Operation.Add, left, right);
                     case "-":
-                        right = generateTree(RPNQueue);
-                        left = generateTree(RPNQueue);
+                        right = generateTree(RPN);
+                        left = generateTree(RPN);
                         return new OperatorNode(Operation.Subtract, left, right);
                     case "*":
-                        right = generateTree(RPNQueue);
-                        left = generateTree(RPNQueue);
+                        right = generateTree(RPN);
+                        left = generateTree(RPN);
                         return new OperatorNode(Operation.Multiply, left, right);
                     case "/":
-                        right = generateTree(RPNQueue);
-                        left = generateTree(RPNQueue);
+                        right = generateTree(RPN);
+                        left = generateTree(RPN);
                         return new OperatorNode(Operation.Divide, left, right);
                     case "^":
-                        right = generateTree(RPNQueue);
-                        left = generateTree(RPNQueue);
+                        right = generateTree(RPN);
+                        left = generateTree(RPN);
                         return new OperatorNode(Operation.Exponentiate, left, right);
                     default:
                         throw new InvalidOperationException("Invalid operator in expression.");
