@@ -19,6 +19,14 @@ namespace CalcGUI
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handles all button presses. Currently handles three different classes of buttons: numbers, operators, and parentheses.
+        /// Behaviour differs depending on if the button that is pressed is of the same class as the previous button pressed.
+        /// The "." button and "+/-" button technically fit in the number class, as they modify numbers and start new ones, and the
+        /// "=" button is in a class of its own because it starts the evaluation of the expression. It is a sort of meta-operator, if you will.
+        /// </summary>
+        /// <param name="sender">The button that was clicked</param>
+        /// <param name="e">The event arguments. Unused.</param>
         private void btn_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
@@ -34,7 +42,12 @@ namespace CalcGUI
                     lastButtonText += b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
-
+                else if (lastButtonText == "(" || lastButtonText == ")")
+                {
+                    currentExpr += " " + lastButtonText;
+                    lastButtonText = b.Text;
+                    txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
+                }
                 else
                 {
                     currentExpr += " " + lastButtonText;
@@ -44,7 +57,17 @@ namespace CalcGUI
             }
             else if(b.Text == "(" || b.Text == ")")
             {
-
+                if (currentExpr == "")
+                {
+                    lastButtonText = b.Text;
+                    txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
+                }
+                else
+                {
+                    currentExpr += " " + lastButtonText;
+                    lastButtonText = b.Text;
+                    txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
+                }
             }
             else if(b.Text == "+" || b.Text == "-" || b.Text == "*" || b.Text == "/" || b.Text == "^")
             {
@@ -52,6 +75,12 @@ namespace CalcGUI
                 {
                     lastButtonText = b.Text;
                     currentExpr = "0";
+                    txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
+                }
+                else if (lastButtonText == "(" || lastButtonText == ")")
+                {
+                    currentExpr += " " + lastButtonText;
+                    lastButtonText = b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
                 else if (isNumber(lastButtonText))
@@ -73,7 +102,6 @@ namespace CalcGUI
                     lastButtonText += b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
-
                 else
                 {
                     currentExpr += " " + lastButtonText;
@@ -94,13 +122,30 @@ namespace CalcGUI
                     }
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
-
                 else
                 {
                     currentExpr += " " + lastButtonText;
                     lastButtonText = "-0";
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
+            }
+            else if(b.Text == "=")
+            {
+                try
+                {
+                    txtResult.Text = CalcTreeConsoleTest.CalcTree.ConvertStringToTree(txtInputExpr.Text).evaluate().ToString();
+                }
+                catch (Exception)
+                {
+                    txtResult.Text = "Error";
+                }
+
+                currentExpr = "";
+                lastButtonText = "";
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid button pressed");
             }
         }
 
