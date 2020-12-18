@@ -53,7 +53,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="MathNode.cs" />
+    <Compile Include="IMathNode.cs" />
     <Compile Include="NumericNode.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperatorNode.cs" />

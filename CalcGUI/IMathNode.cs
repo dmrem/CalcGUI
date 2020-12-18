@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CalcTreeConsoleTest
+namespace CalcGUI
 {
-    public interface MathNode
+    public interface IMathNode
     {
         /// <summary>
         /// Finds the value represented by this tree. If the node that this function is called on is an operation, 
@@ -12,6 +12,6 @@ namespace CalcTreeConsoleTest
         /// returns that number.
         /// </summary>
         /// <returns>The result of the calculation.</returns>
-        MathNode evaluate();
+        IMathNode Evaluate();
     }
 }

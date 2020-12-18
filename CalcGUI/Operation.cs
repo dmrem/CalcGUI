@@ -1,4 +1,4 @@
-namespace CalcTreeConsoleTest
+namespace CalcGUI
 {
     public enum Operation
     {

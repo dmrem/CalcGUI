@@ -35,9 +35,11 @@ namespace CalcGUI
                 throw new NullReferenceException("Button handler called with non-button sender.");
             }
 
-            if (isNumber(b.Text))
+            // TODO: Make this code actually readable - right now it's a mess of undocumented if statements
+
+            if (IsNumber(b.Text))
             {
-                if (isNumber(lastButtonText))
+                if (IsNumber(lastButtonText))
                 {
                     lastButtonText += b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
@@ -83,7 +85,7 @@ namespace CalcGUI
                     lastButtonText = b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
                 }
-                else if (isNumber(lastButtonText))
+                else if (IsNumber(lastButtonText))
                 {
                     currentExpr += " " + lastButtonText;
                     lastButtonText = b.Text;
@@ -97,7 +99,7 @@ namespace CalcGUI
             }
             else if(b.Text == ".")
             {
-                if (isNumber(lastButtonText))
+                if (IsNumber(lastButtonText))
                 {
                     lastButtonText += b.Text;
                     txtInputExpr.Text = (currentExpr + " " + lastButtonText).Trim();
@@ -111,7 +113,7 @@ namespace CalcGUI
             }
             else if(b.Text == "+/-")
             {
-                if (isNumber(lastButtonText))
+                if (IsNumber(lastButtonText))
                 {
                     if(lastButtonText[0] == '-'){
                         lastButtonText = lastButtonText.Substring(1);
@@ -133,7 +135,7 @@ namespace CalcGUI
             {
                 try
                 {
-                    txtResult.Text = CalcTreeConsoleTest.CalcTree.ConvertStringToTree(txtInputExpr.Text).evaluate().ToString();
+                    txtResult.Text = CalcTree.ConvertStringToTree(txtInputExpr.Text).Evaluate().ToString();
                 }
                 catch (Exception)
                 {
@@ -149,7 +151,7 @@ namespace CalcGUI
             }
         }
 
-        private bool isNumber(String s)
+        private bool IsNumber(String s)
         {
             try
             {

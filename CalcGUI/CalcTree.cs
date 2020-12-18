@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
-namespace CalcTreeConsoleTest
+namespace CalcGUI
 {
     public static class CalcTree
     {
-        static Hashtable precedence = new Hashtable
+        /// <summary>
+        /// The operator precedence definitions. The higher the number, the earlier an operation is to be performed, ignoring parentheses.
+        /// The ( operator is there because the algorithm requires it, not because ( is a legitimate operator
+        /// </summary>
+        public static readonly Hashtable precedence = new Hashtable
         {
             {"^", 6},
             {"/", 5},
@@ -15,14 +18,20 @@ namespace CalcTreeConsoleTest
             {"-", 4},
             {"(", 0}
         };
-        
-        public static MathNode ConvertStringToTree(string s)
+
+        /// <summary>
+        /// Converts a given infix expression to a binary expression tree. Each token in the expression string is delimited by spaces.
+        /// Valid tokens are any number representable as a double, any operator in the precedence table above, and parentheses. 
+        /// </summary>
+        /// <param name="s">The expression to convert.</param>
+        /// <returns></returns>
+        public static IMathNode ConvertStringToTree(String s)
         {
             // step one is to convert the given string to reverse polish notation
             // will use Dijkstra's shunting yard algorithm
             // used tutorial of algorithm from http://www.learn4master.com/algorithms/convert-infix-notation-to-reverse-polish-notation-java
             // used pseudocode but not java example
-            
+
             String[] tokens = s.Split(' ');
 
             Queue RPNQueue = new Queue();
@@ -55,26 +64,26 @@ namespace CalcTreeConsoleTest
                     OperatorStack.Pop(); // remove the "("
                     continue;
                 }
-                
+
                 // if the token isn't a number or paren, it must be an operator
                 // if the stack contains an operator with higher precedence than the current one,
                 // put the stack operator in the queue
                 // repeat until stack is empty or has an op of lower precedence than the current one
                 // then push current op onto stack
-                while (OperatorStack.Count != 0 && 
+                while (OperatorStack.Count != 0 &&
                        (int)precedence[OperatorStack.Peek() as String] >= (int)precedence[token])
                 {
                     RPNQueue.Enqueue(OperatorStack.Pop());
                 }
                 OperatorStack.Push(token);
-                
+
             }
 
             while (OperatorStack.Count != 0)
             {
                 RPNQueue.Enqueue(OperatorStack.Pop());
             }
-            
+
             // step 2 is to convert the rpn into a tree
             // easiest way to do that that I can think of without reading more tutorials
             // is to convert from postfix to prefix
@@ -84,21 +93,21 @@ namespace CalcTreeConsoleTest
             {
                 OperatorStack.Push(RPNQueue.Dequeue());
             }
-            
+
             while (OperatorStack.Count != 0)
             {
                 RPNQueue.Enqueue(OperatorStack.Pop());
             }
 
             // helper function to recursively generate a tree
-            MathNode generateTree(Queue RPN)
+            IMathNode generateTree(Queue RPN)
             {
                 if (RPN.Peek() is double)
                 {
                     return new NumericNode((double)RPN.Dequeue());
                 }
 
-                MathNode left, right;
+                IMathNode left, right;
                 switch ((string)RPN.Dequeue())
                 {
                     case "+":
@@ -125,7 +134,7 @@ namespace CalcTreeConsoleTest
                         throw new InvalidOperationException("Invalid operator in expression.");
                 }
             }
-            
+
             return generateTree(RPNQueue);
         }
     }

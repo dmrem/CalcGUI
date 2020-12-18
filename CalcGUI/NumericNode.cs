@@ -1,15 +1,14 @@
-using System;
 using System.Globalization;
 
-namespace CalcTreeConsoleTest
+namespace CalcGUI
 {
-    
+
     /// <summary>
     /// A MathNode which only supports numeric data values and no branches.
     /// </summary>
-    public class NumericNode : MathNode
+    public class NumericNode : IMathNode
     {
-        
+
         /// <summary>
         /// The data held by the node.
         /// </summary>
@@ -25,14 +24,19 @@ namespace CalcTreeConsoleTest
             this.data = data;
         }
 
-        public MathNode evaluate()
+        /// <summary>
+        /// Evaluates the expression tree rooted at the calling node.
+        /// As a NumericNode never has any leaves, it just evaluates to itself.
+        /// </summary>
+        /// <returns>The NumericNode that this function was called on.</returns>
+        public IMathNode Evaluate()
         {
             return this;
         }
 
         public override string ToString()
         {
-            return this.data.ToString(CultureInfo.InvariantCulture);
+            return data.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

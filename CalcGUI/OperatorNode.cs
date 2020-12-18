@@ -1,6 +1,6 @@
 using System;
 
-namespace CalcTreeConsoleTest
+namespace CalcGUI
 {
     /// <summary>
     /// A MathNode which holds an operation as defined in Operation.cs.
@@ -8,7 +8,7 @@ namespace CalcTreeConsoleTest
     /// evaluate function.
     /// Both branches must be populated with an evaluatable node.
     /// </summary>
-    public class OperatorNode : MathNode
+    public class OperatorNode : IMathNode
     {
         /// <summary>
         /// The operation held by the node.
@@ -18,27 +18,12 @@ namespace CalcTreeConsoleTest
         /// <summary>
         /// The node on the left branch of the tree.
         /// </summary>
-        public MathNode left;
+        public IMathNode left;
         
         /// <summary>
         /// The node on the right branch of the tree.
         /// </summary>
-        public MathNode right;
-        
-        /// <summary>
-        /// Inaccessible. All currently implemented operations require two operands.
-        /// </summary>
-        private OperatorNode() {}
-        
-        /// <summary>
-        /// Inaccessible. All currently implemented operations require two operands.
-        /// </summary>
-        private OperatorNode(Operation op) {}
-
-        /// <summary>
-        /// Inaccessible. All currently implemented operations require two operands.
-        /// </summary>
-        private OperatorNode(Operation op, MathNode left) {}
+        public IMathNode right;
 
         /// <summary>
         /// Creates a new OperationNode, which represents a mathematical expression.
@@ -48,21 +33,11 @@ namespace CalcTreeConsoleTest
         /// <param name="op"></param>
         /// <param name="left"></param>
         /// <param name="right"></param>
-        public OperatorNode(Operation op, MathNode left, MathNode right)
+        public OperatorNode(Operation op, IMathNode left, IMathNode right)
         {
-            if (left == null)
-            {
-                throw new NullReferenceException("Left branch of OperatorNode cannot be null.");
-            }
-            
-            if (right == null)
-            {
-                throw new NullReferenceException("Right branch of OperatorNode cannot be null.");
-            }
-
             this.op = op;
-            this.left = left;
-            this.right = right;
+            this.left = left ?? throw new NullReferenceException("Left branch of OperatorNode cannot be null.");
+            this.right = right ?? throw new NullReferenceException("Right branch of OperatorNode cannot be null.");
         }
         /// <summary>
         /// Evaluates the expression represented by the expression tree rooted at the node this function is
@@ -72,7 +47,7 @@ namespace CalcTreeConsoleTest
         /// <exception cref="NullReferenceException">If any branch of the expression tree is unexpectedly null</exception>
         /// <exception cref="InvalidOperationException">If a branch evaluation somehow returns null</exception>
         /// <exception cref="ArgumentException">If an operator node contains an invalid operation</exception>
-        public MathNode evaluate()
+        public IMathNode Evaluate()
         {
             if (left == null)
             {
@@ -84,8 +59,8 @@ namespace CalcTreeConsoleTest
                 throw new NullReferenceException("Right branch of evaluated OperatorNode is null.");
             }
 
-            NumericNode leftValue = this.left.evaluate() as NumericNode;
-            NumericNode rightValue = this.right.evaluate() as NumericNode;
+            NumericNode leftValue = this.left.Evaluate() as NumericNode;
+            NumericNode rightValue = this.right.Evaluate() as NumericNode;
 
             if (leftValue == null)
             {
@@ -121,7 +96,7 @@ namespace CalcTreeConsoleTest
         
         public override string ToString()
         {
-            return this.op.ToString();
+            return op.ToString();
         }
         
     }
